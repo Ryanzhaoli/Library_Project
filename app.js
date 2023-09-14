@@ -4,123 +4,90 @@ console.log("Hello World!\n==========\n");
 console.log("PROJECT:\n==========\n");
 const books = [
     {
-      id: 1,
-      title: "Name of the Wind",
-      author: "Patrick Rothfuss",
-      read: true,
+        title: "Name of the Wind",
+        author: "Patrick Rothfuss",
+        read: true,
     },
-  ];
-  
-  class Book {
-    constructor(id, title, author, read) {
-      this.id = id;
-      this.title = title;
-      this.author = author;
-      this.read = read;
-      this.favorite = false;
+];
+
+class Book {
+    constructor(title, author, read) {
+        this.title = title;
+        this.author = author;
+        this.read = read;
     }
-  }
-  
-  class Library {
+}
+
+class Library {
     constructor(books) {
-      this.nextId = books.lenght;
-      this.books = books;
+        this.bookCount = books.length;
+        this.books = books;
     }
-    addBook(book) {
-      if (book) {
-        var { id, title, author, read } = book;
-      }
-      if (!book) {
-        console.log("creating new book ...");
-        // Select the Inputs from the form -- title, author, and read
-        var titleInput = document.getElementById("title");
-        var authorInput = document.getElementById("author");
-        var readInput = document.getElementById("read");
-        //Increment book count property
-        this.nextId++;
-  
-        // Create an instance from my Book class with the input values
-        var newBook = new Book(
-          this.nextId,
-          titleInput.value,
-          authorInput.value,
-          readInput.checked
-        );
-  
-        //Push this new book instance into the books array
+
+    addBook() {
+        // select the inputs from the form 00 title, author, and read
+        const title = document.getElementById("title");
+        const author = document.getElementById("author");
+        const read = document.getElementById("read");
+        const newBook = new Book(title.value, author.value, read.checked);
+        // creates a new book instance from my book class with the values using the "new" operator
+
         this.books.push(newBook);
-      }
-      // Select the table body
-      const tbody = document.getElementById("tableBody");
-      // Create new table row
-      const newTr = document.createElement("tr");
-      newTr.classList.add(id || newBook.id);
-      console.log("made it this far");
-      newTr.addEventListener("dbclick", () => {
-        this.removeBook(id || newBook.id);
-      });
-      newTr.addEventListener("click", () => {
-        this.markFavorite(id || newBook.id);
-      });
-      //Create three new table data cells
-      const newTitle = document.createElement("td");
-      const newAuthor = document.createElement("td");
-      const newRead = document.createElement("td");
-      // Add text content to td's with book values
-      newTitle.textContent = title || newBook.title;
-      newAuthor.textContent = author || newBook.author;
-      const newCheckbox = document.createElement("input");
-      newCheckbox.classList.add(id || newBook.id);
-      newCheckbox.type = "checkbox";
-      newCheckbox.checked = read || readInput.checked;
-      newCheckbox.disabled = read || readInput.checked;
-      newCheckbox.addEventListener("click", (event) => {
-        this.markRead(event.target, id || newBook.id);
-      });
-      newRead.appendChild(newCheckbox);
-      //Append the td's to the tr
-      newTr.appendChild(newTitle);
-      newTr.appendChild(newAuthor);
-      newTr.appendChild(newRead);
-      //Append the tr to the body
-      tbody.appendChild(newTr);
+        // increment the book count property
+
+        this.bookCount++;
+        // pass this new book into my books array using the "push" method.
+        // it adds new items to the end of an array.
+
+        const tbody = document.getElementById("tableBody");
+        // select the table id="table" OR select the table body. Add an id to the body in HTML.
+        // display to the DOM
+
+        const newTr = document.createElement("tr");
+        // create a new table row
+        const newTitle = document.createElement("td");
+        const newAuthor = document.createElement("td");
+        const newRead = document.createElement("td");
+        // create three new table data cells
+
+        newTitle.textContent = title.value;
+        newAuthor.textContent = author.value;
+        const newCheckbox = document.createElement("input");
+        newCheckbox.type = "checkbox";
+        newCheckbox.checked = read.checked;
+        newCheckbox.disabled = read.checked;
+        newRead.appendChild(newCheckbox);
+
+        // add text content to tds with book values
+        newTr.appendChild(newTitle);
+        newTr.appendChild(newAuthor);
+        newTr.appendChild(newRead);
+        // append the tds to the tr
+
+        tbody.appendChild(newTr);
+        // append the tr to the tbody
     }
-  
+
     markRead(checkbox, id) {
-      this.books.forEach((book) => {
-        if (id === book.id) {
-          book.read = true;
-          checkbox.disabled = true;
-        }
-      });
+        // markRead will mark read after it's been added to the library and save as read on the books object
+        this.books.forEach(book => {
+            if(id === book.id) {
+                book.read = true;
+                checkbox.checked = true;
+                checkbox.disabled = true;
+                // if you read something you cannot unread it
+            }
+        });
     }
-  
-    markFavorite(bookId) {
-      this.books.foreach((book) => {
-        if (book.id === bookId) {
-          book.favorite = !book.favorite;
-        }
-      });
-      document.getElementById(bookId)[0].classList.toggle("favorite");
-    }
-    removeBook(bookId) {
-      //Reassign the books array filtering out thr remove book
-      this.books = this.books.filter(({ id }) => bookId !== id);
-      // Remove the book from the DOM
-      const tbody = document.getElementById("tableBody");
-      tbody.removeChild(document.getElementById(bookId)[0]);
-    }
-  }
-  
-  let library = new Library(books);
-  if (books.lenght > 0) {
-    library.books.forEach((book) => {
-      library.addBook(book);
-    });
-  }
-  const form = document.getElementById("form");
-  
-  form.addEventListener("submit", (event) => {
+}
+
+const library = new Library(books);
+
+const form = document.getElementById("form");
+form.addEventListener("submit", (event) => {
     event.preventDefault();
-    library.addBook();
-  });
+    // prevent the default -- don't send this to any URL address. Don't refresh the page.
+    // when they submit this form (adding a book) I want to grab the information.
+        library.addBook();
+        // referring to the instance, not the class name
+});
